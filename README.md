@@ -2,7 +2,7 @@
 
 LeadNest is a small sales CRM for a portfolio or a project walkthrough. An administrator and agents share one workspace: leads, one deal per qualified lead, logged activities, and follow-ups. Data is stored in MySQL. The browser talks only to the frontend origin, and that origin proxies API calls to the Spring Boot backend.
 
-Chosen versions
+## Chosen versions
 
 Checked against current Spring docs and Maven Central on 18 October 2026.
 
