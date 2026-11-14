@@ -1,0 +1,51 @@
+server:
+  port: ${SERVER_PORT:8081}
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+  servlet:
+    session:
+      timeout: 8h
+      cookie:
+        http-only: true
+        same-site: lax
+        secure: false
+        path: /
+
+spring:
+  application:
+    name: leadnest-crm
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3307/leadnest?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&connectionTimeZone=UTC&characterEncoding=utf8}
+    username: ${SPRING_DATASOURCE_USERNAME:leadnest}
+    password: ${SPRING_DATASOURCE_PASSWORD:leadnest}
+    hikari:
+      initialization-fail-timeout: 60000
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate.jdbc.time_zone: UTC
+  flyway:
+    enabled: true
+    clean-disabled: true
+    connect-retries: 30
+    connect-retries-interval: 2
+    locations: classpath:db/migration
+  jackson:
+    datatype:
+      datetime:
+        write-dates-as-timestamps: false
+
+leadnest:
+  admin:
+    email: ${LEADNEST_ADMIN_EMAIL:}
+    password: ${LEADNEST_ADMIN_PASSWORD:}
+    name: ${LEADNEST_ADMIN_NAME:Administrator}
+  demo-data: ${LEADNEST_DEMO_DATA:false}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

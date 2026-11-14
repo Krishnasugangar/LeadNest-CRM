@@ -1,0 +1,55 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: leadnest-mysql
+    environment:
+      MYSQL_DATABASE: leadnest
+      MYSQL_USER: leadnest
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - leadnest-mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  backend:
+    build: ./backend
+    container_name: leadnest-backend
+    environment:
+      SERVER_PORT: 8081
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/leadnest?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&connectionTimeZone=UTC&characterEncoding=utf8
+      SPRING_DATASOURCE_USERNAME: leadnest
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      LEADNEST_ADMIN_EMAIL: ${LEADNEST_ADMIN_EMAIL}
+      LEADNEST_ADMIN_PASSWORD: ${LEADNEST_ADMIN_PASSWORD}
+      LEADNEST_ADMIN_NAME: ${LEADNEST_ADMIN_NAME:-Administrator}
+      LEADNEST_DEMO_DATA: ${LEADNEST_DEMO_DATA:-false}
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo >/dev/tcp/127.0.0.1/8081'"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 40s
+
+  frontend:
+    build: ./frontend
+    container_name: leadnest-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  leadnest-mysql:
