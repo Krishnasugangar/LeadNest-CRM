@@ -8,7 +8,7 @@ Checked against current Spring docs and Maven Central on 18 October 2026.
 
 | Piece | Version | Why this one |
 | --- | --- | --- |
-| Java | 21 | Supported by Spring Boot 4.1 (Java 17 through 26) |
+
 | Spring Boot | 4.1.1 | Current stable release (20 August 2026). Needs Spring Framework 7.0.9 or newer |
 | Spring Web MVC | `spring-boot-starter-webmvc` | In Boot 4 this replaces `spring-boot-starter-web` |
 | Spring Data JPA | Boot-managed | Hibernate, via `spring-boot-starter-data-jpa` |
